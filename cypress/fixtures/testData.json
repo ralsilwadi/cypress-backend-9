@@ -1,0 +1,18 @@
+{
+  "postRequestBody": {
+    "DOB": "2000-11-11",
+    "EMAIL": "dimensionconqueror@gmail.com",
+    "FIRST_NAME": "Emperor",
+    "LAST_NAME": "Doe",
+    "INSTRUCTOR_ID": 2
+  },
+
+  "putRequestBody": {
+    "DOB": "2000-11-11",
+    "EMAIL": "hehehhehe@gmail.com",
+    "FIRST_NAME": "ddd",
+    "LAST_NAME": "Doddde",
+    "INSTRUCTOR_ID": 3
+  }
+}
+

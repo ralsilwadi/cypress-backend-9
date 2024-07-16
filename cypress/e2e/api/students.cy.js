@@ -1,35 +1,58 @@
-describe('CRUD Operations', () => {
-  after(() => {
+import { postRequestBody, putRequestBody } from '../../fixtures/testData.json'
+
+describe('CRUD Operations', function () {
+  after(function () {
     cy.request({
       method: 'DELETE',
       url: `${Cypress.env('baseUrl')}/all/delete`,
     })
   })
+  let studentID
 
-  it('Create a new student using POST', () => {
-    const postRequestBody = {
-      DOB: '1974-07-28',
-      EMAIL: 'Sterling.Brakus30@hotmail.com',
-      FIRST_NAME: 'Oran',
-      LAST_NAME: 'Walsh',
-      INSTRUCTOR_ID: 4,
-    }
-
+  it('POST a new student', function () {
     cy.request({
       method: 'POST',
-      url: Cypress.env('baseUrl'),
+      url: `${Cypress.env('baseUrl')}`,
       body: postRequestBody,
     }).then((response) => {
-      cy.log(response)
+      studentID = response.body.STUDENT_ID
+    })
+  })
 
-      console.log(JSON.stringify(response.body))
-      console.log(JSON.stringify(response.body, null, 2))
-      console.log(JSON.stringify(response.body, null, 6))
+  it('GET a new student', function () {
+    cy.request({
+      method: 'GET',
+      url: `${Cypress.env('baseUrl')}/${studentID}`,
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+    })
+  })
 
-      expect(response.status).to.equal(201)
-      expect(response.duration).to.be.below(500)
+  /**
+   * Create a PUT request
+   * Update the student we created
+   * Validate the status code is 2xx
+   * And console log the response
+   */
 
-      cy.log(response.body['FIRST_NAME'] + ' ' + response.body.FIRST_NAME)
+  it('Update the created student using PUT', () => {
+    cy.request({
+      method: 'PUT',
+      url: `${Cypress.env('baseUrl')}/${studentID}`,
+      body: putRequestBody,
+    }).then((response) => {
+      expect(response.status).to.eq(201)
+    })
+  })
+
+  it('Get the updated student using GET', () => {
+    cy.request({
+      method: 'GET',
+      url: `${Cypress.env('baseUrl')}/${studentID}`,
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.duration).to.be.below(1000)
+      expect(response.body.FIRST_NAME).to.eq(putRequestBody.FIRST_NAME)
     })
   })
 })
